@@ -1,0 +1,31 @@
+@mixin absolute-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@mixin absolute-cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+@mixin base-triangle {
+  width: 0;
+  height: 0;
+  border-style: solid;
+}
+
+@mixin triangle-down($color, $width, $height) {
+  @include base-triangle;
+  border-width: $height * 1px ($width/2) * 1px 0 $height * 1px;
+  border-color: $color $clear $clear $clear;
+}
+
+@mixin background-opacity($color, $opacity) {
+    background: $color; /* The Fallback */
+    background: rgba($color, $opacity);
+}

@@ -1,0 +1,28 @@
+.absolute-center {
+  @include absolute-center;
+}
+
+.absolute-cover {
+  @include  absolute-cover;
+}
+
+.button,
+input[type="submit"] {
+  display: inline-block;
+  line-height: 1;
+  border: none;
+  margin-top: 2rem;
+  padding: 1.25rem 4.5rem;
+  background-color: $accent-colour;
+  color: #fff;
+  text-decoration: none;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.horizontal {
+  display: flex;
+  li + li {
+    margin-right: 1em;
+  }
+}

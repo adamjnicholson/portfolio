@@ -1,0 +1,125 @@
+nav#main-menu {
+    display: inline-block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 999999;
+    ul {
+        display: grid;
+        grid-template-columns: 2;
+    }
+    li {
+        position: relative;
+        width: $square;
+        height: $square;
+        color: $white;
+        grid-column-start: 1;
+        transition: $animate;
+        // box-shadow: 5px 0 10px -5px rgba(0, 0, 0, .5);
+        overflow: hidden;
+        &:after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, .2);
+            top: 0;
+            left: -100%;
+        }
+        &.name {
+            grid-column-start: 2;
+            transform: translateX(-100%);
+            transition-timing-function: ease-out;
+            // box-shadow: 3px 3px 10px rgba(0,0,0, .3);
+        }
+        &:first-child {
+            box-shadow: none;
+            z-index: 2;
+        }
+        
+        $start: 3;
+        $end: 4;
+        @for $i from $start through $end {
+            &:nth-child(#{$i}) {
+                transform: translateY(-($i - $start + 1) * 100%);
+                transition-duration: ($i * .3) + 0s;
+                z-index: 10 - $i;
+            }
+        }
+
+        &.link {
+            border-top: 1px solid rgba(255,255,255, .1);
+            $directions: in-top in-right in-bottom in-left out-top out-right out-bottom out-left;
+            @each $dir in $directions {
+                &.#{$dir}:after {
+                    animation: #{$dir} .3s ease 0s 1 forwards;
+                }
+            }
+        }
+
+        span {
+            z-index: 10;
+            pointer-events: none;
+        }      
+    }
+    &.expand {
+        li {
+            transform: translate(0, 0);
+        }
+    }
+}
+
+@keyframes in-top {
+    from {top: -100%; left: 0}
+    to { top: 0; left: 0}
+}
+
+@keyframes in-right {
+    from {top: 0; left: 100%}
+    to { top: 0; left: 0}
+}
+
+@keyframes in-bottom {
+    from {top: 100%; left: 0}
+    to { top: 0; left: 0}
+}
+
+@keyframes in-left {
+    from {top: 0; left: -100%}
+    to { top: 0; left: 0}
+}
+
+@keyframes out-top {
+    from {top: 0; left: 0}
+    to {top: -100%; left: 0}
+}
+
+@keyframes out-right {
+    from {top: 0; left: 0}
+    to {top: 0; left: 100%}
+}
+
+@keyframes out-bottom {
+    from {top: 0; left: 0}
+    to {top: 100%; left: 0}
+}
+
+@keyframes out-left {
+    from {top: 0; left: 0}
+    to {top: 0; left: -100%}
+}
+
+.natureworks nav#main-menu li{
+    background-color: $light-green;
+}
+
+.anboc nav#main-menu li{
+    background-color: $light-yellow;
+}
+
+.buywood nav#main-menu li{
+    background-color: $light-red;
+}
+
+
+
