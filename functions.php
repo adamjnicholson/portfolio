@@ -60,13 +60,12 @@
   // Attach callback to 'tiny_mce_before_init'
   add_filter( 'tiny_mce_before_init', 'my_mce_before_init_insert_formats' );
 
-  if ($acfEnabled) {
 
-    acf_add_options_page();
+    // acf_add_options_page();
 
     require_once('inc/custom_functions.php');
     require_once('inc/custom_filters.php');
     require_once('inc/custom_shortcodes.php');
     require_once('inc/generate_content.php');
-  }
+ 
 

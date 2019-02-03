@@ -28,48 +28,13 @@
     #########################################################
     #########################################################
     ###################                   ###################
-    ###################      IMAGES      ####################
+    ###################      MENUS      ####################
     ###################                   ###################
     #########################################################
     #########################################################
   */
 
-  function genImageTag($data, $size = 'full', $retina = false, $class = '' ){
 
-    if(!is_array($data)){
-      return false;
-    }
-
-    $retinaDivisor = $retina ? 2 : 1;
-    if ($size !== 'full') {
-      $data['url'] =  $data['sizes'][$size],
-      $data['width'] = $data['sizes'][$size . '-width'],
-      $data['height'] = $data['sizes'][$size . '-height']
-    }
-
-    if($data['url'] != ''){
-      return "<img class="$class" src="$data['url']" alt="$data['alt']" width="$data['width'] / $retinaDivisor" height="$data['height'] / $retinaDivisor"/>";
-    }
-
-    return 'ERROR';
-   
-  }
-
-  function genSvg($iconName, $classes = array()) {
-    $classes = !empty($classes) ? implode(', ', $classes) : '';
-    $html = "<span class="icon $iconName $classes">";
-      $html .= file_get_contents(get_stylesheet_directory_uri() . "/dist/images/$iconName.svg");
-    $html .= '</span>';
-    return $html;
-  }
-
-  function genBackgroundImage($image) {
-    $html = '';
-    if (!empty($image)) {
-      $html .= "background: url('$image['url']') no-repeat center center / cover";
-    }
-    return $html;
-  }
 
   /*
     #########################################################

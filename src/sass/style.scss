@@ -8,6 +8,9 @@
 @import 'base/_global';
 @import 'base/_grid';
 
+@import 'components/_menu';
+@import 'components/_project_nav';
+@import 'components/_project_gallery';
 
 @import 'layout/_header';
 @import 'layout/_footer';
@@ -15,5 +18,4 @@
 @import 'layout/_projects';
 @import 'layout/_responsive';
 
-@import 'components/_menu';
 

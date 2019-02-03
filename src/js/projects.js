@@ -1,3 +1,140 @@
+//HELPER FUNCTIONS
+
+// set background image of element
+const setBgImg = (el, img) => {
+  el.style.backgroundImage = `url('${projectController.imagePrefix}${img}')`;
+}
+
+// return li index that is being targeted
+const findLiIndex = target => {
+  return [...pageEls.previewImages].findIndex(li => target == li)
+}
+
+//IMAGE GALLERY FUNCTIONS
+
+// move the magnifier div over the correct preview image
+const galleryPreviewHover = e => {
+  const i = findLiIndex(e.target);
+  console.log(i)
+  pageEls.magnifier.style.left = i * 25 + '%';
+}
+
+const changeGalleryImage = e => {
+  const targetIndex = findLiIndex(e.target);
+  if (projectController.galleryImageActive === targetIndex) return;
+
+  const unActive = pageEls.galleryImages[[...pageEls.galleryImages].findIndex(el => !el.classList.contains('active'))];
+  const direction = projectController.galleryImageActive < targetIndex ? 'in-left' : 'in-right';
+  
+  unActive.style.zIndex = 2;
+  unActive.style.backgroundImage = e.target.style.backgroundImage;
+  unActive.classList.add(direction);
+
+  projectController.galleryImageActive = targetIndex;
+}
+
+const changeGalleryActive = () => {
+  pageEls.galleryImages.forEach(el => {
+    el.classList.toggle('active');
+    el.classList.remove('in-left', 'in-right');
+    el.style.zIndex = '';
+  }); 
+}
+
+//PROJECT FUNCTIONS
+
+const loadProject = project => {
+  projectController.galleryImageActive = -1;
+
+  pageEls.project.classList.remove('loaded');
+
+  // wait for all animations to complete
+  setTimeout(() => {
+
+    //swap background images
+    const newBg = pageEls.bgImage[[...pageEls.bgImage].findIndex(el => !el.classList.contains('active'))];
+    setBgImg(newBg, project.mainImg);
+    pageEls.bgImage.forEach(el => el.classList.toggle('active'));
+    
+    // swap all content
+    pageEls.projectNumber.textContent = `0${projectController.projectActive + 1}`;
+    pageEls.projectTitle.textContent = project.title;
+    pageEls.desc.textContent = project.desc,
+    pageEls.websiteBtn.href = project.url
+    pageEls.logo.src = projectController.imagePrefix + project.logo;
+
+    // Set gallery image to main image, remove the other
+    pageEls.galleryImages.forEach (el => {
+      if (el.classList.contains('active')) {
+        setBgImg(el, project.mainImg);
+      } else {
+        el.style.backgroundImage = '';
+      }
+    })
+
+    // Set preivew images
+    pageEls.previewImages.forEach((el, i) => {
+      setBgImg(el, project.images[i])
+    });
+
+    pageEls.progressBar.style.width = (projects.length - 1 - projectController.projectActive) * (100 / projects.length) + '%';
+
+    changeButtonStates();
+
+    document.body.classList.remove(...projectController.projectClasses);
+    document.body.classList.add(project.class);
+    pageEls.project.classList.add('loaded');
+  }, 1000);
+}
+
+const changeButtonStates = () => {
+  if (projectController.projectActive === projects.length - 1) {
+    pageEls.nextBtn.classList.add('disabled');
+  } else {
+    pageEls.nextBtn.classList.remove('disabled');
+  }
+
+  if (projectController.projectActive === 0) {
+    pageEls.prevBtn.classList.add('disabled');
+  } else {
+    pageEls.prevBtn.classList.remove('disabled');
+  }
+}
+
+const nextProject = () => {
+  if (projectController.projectActive < projects.length - 1) {
+    projectController.projectActive++;
+    loadProject(projects[projectController.projectActive]);
+  }
+}
+
+const prevProject = () => {
+  if (projectController.projectActive > 0) {
+    projectController.projectActive--
+    loadProject(projects[projectController.projectActive]);
+  }
+}
+
+const init = () => {
+
+  //Event Listeners
+  document.querySelector('ul.arrows li.next').addEventListener('click', nextProject);
+  document.querySelector('ul.arrows li.prev').addEventListener('click', prevProject);
+
+ pageEls.previewImages.forEach(el => {
+    el.addEventListener('mouseover', galleryPreviewHover);
+    el.addEventListener('click', changeGalleryImage)
+  });
+
+  pageEls.galleryImages.forEach(el => el.addEventListener('animationend', changeGalleryActive));
+
+  setTimeout(() => {
+    pageEls.project.classList.add('loaded');
+  }, 400);
+}
+
+
+
 //Page elements used for functions
 const pageEls = {
   project: document.querySelector('#projects'),
@@ -7,14 +144,12 @@ const pageEls = {
   desc: document.querySelector('#projects .content p'),
   websiteBtn: document.querySelector('#projects .content .button'),
   logo: document.querySelector('#projects .logo img'),
-  
-
-
-  imageSlider: document.querySelector('#projects ul.image-slider'),
-  imageSlides: document.querySelectorAll('#projects ul.image-slider li'),
+  galleryImages: document.querySelectorAll('#projects .gallery-image'),
   previewImageContainer: document.querySelector('#projects ul.preview-container'),
   previewImages: document.querySelectorAll('#projects .preview-image'),
   magnifier: document.querySelector('#projects li.magnifier'),
+  nextBtn: document.querySelector('#project-nav .next'),
+  prevBtn: document.querySelector('#project-nav .prev'),
   progressBar: document.querySelector('#projects aside .bar')
 }
 
@@ -54,110 +189,12 @@ const projectController = {
   projectActive: 0,
   projectClasses: projects.map(el => el.class),
   imagePrefix: '//localhost:3000/and/wp-content/themes/and/dist/images/',
-  galleryActive: null
-}
+  galleryImageActive: -1
+};
 
-// return li index that is being targeted
-const findLiIndex = target => {
-  return [...pageEls.previewImageContainer.children].findIndex(li => target == li)
-}
 
-// move the magnifier div over the correct preview image
-const galleryPreviewHover = e => {
-  const i = findLiIndex(e.target.parentNode);
-  pageEls.magnifier.style.left = i * 25 + '%';
-}
 
-const changeGalleryImage = e => {
-  const targetIndex = findLiIndex(e.target.parentNode) + 1;//newActive +1 because first image is the non project image
-  const targetLi = pageEls.imageSlides[targetIndex]; // slide 
-  let slideClass = null
-  
-  if (projectController.galleryActive === targetIndex) return false;
+init();
 
-  targetLi.classList.remove('in-left', 'in-right'); // remove animation classes
-  pageEls.imageSlides.forEach(el => el.style.zIndex = 1); // reset all z-indexes
-  pageEls.imageSlides[projectController.galleryActive].style.zIndex = 2;
-  pageEls.imageSlides[targetIndex + 1].style.zIndex = 3;
 
-  if (targetIndex > projectController.galleryActive || projectController.galleryActive === null) {
-      slideClass = 'in-left';
-  } else if ( targetIndex < projectController.galleryActive) {
-      slideClass = 'in-right';
-  }
-
-  setTimeout(() => {
-      pageEls.imageSlides[targetIndex + 1].classList.add(slideClass);
-  }, 1)
-  projectController.galleryActive = targetIndex;
-}
-
-[...pageEls.previewImageContainer.children].forEach(el => {
-  el.addEventListener('mouseover', galleryPreviewHover);
-  el.addEventListener('click', changeGalleryImage)
-})
-
-const setBgImg = (el, img) => {
-  el.style.background = `url('${projectController.imagePrefix}${img}') no-repeat 0% center / cover`;
-}
-
-const loadProject = project => {
-  pageEls.project.classList.remove('loaded');
-
-  setTimeout(() => {
-    const newBg = document.querySelector('#projects .bg-image li:not(.active)')
-    setBgImg(newBg, project.mainImg);
-    pageEls.bgImage.forEach(el => el.classList.toggle('active'));
-    
-    pageEls.projectNumber.textContent = `0${projectController.projectActive + 1}`;
-    pageEls.projectTitle.textContent = project.title;
-    pageEls.desc.textContent = project.desc,
-    pageEls.websiteBtn.href = project.url
-
-    pageEls.logo.src = projectController.imagePrefix + project.logo;
-    setBgImg(pageEls.imageSlides[0], project.mainImg);
-
-    pageEls.imageSlides.forEach(el => {
-        el.classList.remove('in-left', 'in-right');
-        el.style.zIndex = 1
-    });
-    pageEls.imageSlides[0].style.zIndex = 3;
-
-    project.images.forEach((el, i) => {
-        setBgImg(pageEls.imageSlides[i + 1], el);
-        setBgImg(pageEls.previewImages[i], el);
-    });
-
-    pageEls.progressBar.style.width = (projects.length - 1 - projectController.projectActive) * (100 / projects.length) + '%';
-
-    document.body.classList.remove(...projectController.projectClasses);
-    document.body.classList.add(project.class);
-    pageEls.project.classList.add('loaded');
-  }, 1000);
-}
-
-const nextProject = () => {
-  console.log('done')
-  projectController.projectActive++
-  projectController.projectActive = Math.min(projectController.projectActive, projects.length - 1)
-  loadProject(projects[projectController.projectActive]);
-}
-
-const prevProject = () => {
-  projectController.projectActive--
-  projectController.projectActive = Math.max(projectController.projectActive, 0)
-  loadProject(projects[projectController.projectActive]);
-}
-
-const reset = e => {
-  
-}
-
-document.querySelector('ul.arrows li.next').addEventListener('click', nextProject);
-document.querySelector('ul.arrows li.prev').addEventListener('click', prevProject);
-pageEls.projectNumber.addEventListener('transitionend', reset);
-
-setTimeout(() => {
-  pageEls.project.classList.add('loaded');
-}, 400)
 
