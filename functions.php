@@ -20,13 +20,15 @@
 
     wp_enqueue_script( 'and-js-footer', get_stylesheet_directory_uri() . '/dist/js/scripts.min.js', array(), null, true);
 
-    if ($acfEnabled) {
-      $localize = [
-        'prevArrow' => genSvg('icon-arrow-left'),
-        'nextArrow' => genSvg('icon-arrow-right'),
-      ];
-      wp_localize_script( 'and-js-footer', 'localize', $localize );
-    }
+    $localize = [
+      'prevArrow' => genSvg('icon-arrow-left'),
+      'nextArrow' => genSvg('icon-arrow-right'),
+      'imageDir' => get_stylesheet_directory_uri() . '/dist/images/'
+    ];
+    wp_localize_script( 'and-js-footer', 'localize', $localize );
+
+    
+    
 
   }
   add_action( 'wp_enqueue_scripts', 'and_scripts' );

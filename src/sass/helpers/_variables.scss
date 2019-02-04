@@ -2,7 +2,10 @@ $white: #FFF;
 $black: #000;
 $clear: transparent;
 
-$lightPurple: #7A2798;
+
+$gray-purple: #98849F;
+$purple: #300B3E;
+$light-purple: #7A2798;
 $green: #0F9437;
 $light-green: #56AA80;
 $yellow:#F8A01A;
@@ -18,3 +21,9 @@ $heading-font: $body-font;
 $animate: all .3s ease-out;
 
 $square: 6.25rem;
+
+$projects: (
+  ('natureworks', $green, $light-green),
+  ('anboc', $yellow, $light-yellow),
+  ('buywood', $red, $light-red)
+);

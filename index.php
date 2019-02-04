@@ -6,7 +6,10 @@
 get_header(); ?>
 
 <?php $images = get_stylesheet_directory_uri() . '/dist/images/'; ?>
-
+<section id="landing" class="page-section">
+  <?php echo genSvg('lg-logo', 'absolute-center'); ?>
+  <?php echo genSvg('lg-logo', 'absolute-center'); ?>
+</section>
 <section id="projects" class="page-section">
   <ul class="bg-image absolute-cover no-list">
     <li class="absolute-cover active" style="background: url('<?php echo $images . 'forest-edited.jpg'; ?>') no-repeat 0% center / cover"></li>
@@ -59,12 +62,26 @@ get_header(); ?>
   </div>
 </section>
 <section id="map" class="page-section">
-<ul class="bg-image absolute-cover no-list">
-  <li class="absolute-cover active">
-
-  </li>
-  <li class="absolute-cover"></li>
-</ul>
+  <ul class="bg-image absolute-cover no-list">
+    <li class="absolute-cover active"></li>
+  </ul>
+  <div class="col-2">
+    <aside>
+      <div class="marker-toggle">
+        <?php echo genSvg('coffee'); ?>
+        <div class="toggle"></div>
+        <?php echo genSvg('beer'); ?>
+      </div>
+    </aside>
+    <article>
+      <h1 class="h2">Interested In <br>Working Together?</h1>
+      <p>Let's grab a coffee or beer to discuss how I can help you achieve your online goals. Drop me a line down below with your details and I will get in contact with your soon.</p>
+      <div class="input-container">
+        <label for="name">Name</label>
+        <input type="text">
+      </div>
+    </article>
+  </div>
 </section>
 
 
