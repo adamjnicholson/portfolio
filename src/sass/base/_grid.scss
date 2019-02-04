@@ -19,6 +19,7 @@
   &:after {
     content: '';
     @include absolute-cover;
+    pointer-events: none;
   }
   .bg-image {
     height: 100%;

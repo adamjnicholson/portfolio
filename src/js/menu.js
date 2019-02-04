@@ -1,9 +1,8 @@
-const menu = document.querySelector('nav');
 const menuLi =  document.querySelectorAll('nav#main-menu li');
 
-setTimeout(() => {
-    menu.classList.add('expand');
-}, 400);
+// setTimeout(() => {
+//     menu.classList.add('expand');
+// }, 400);
 
 
 const directions = ['top', 'right', 'bottom', 'left'];

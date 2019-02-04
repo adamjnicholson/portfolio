@@ -128,9 +128,9 @@ const init = () => {
 
   pageEls.galleryImages.forEach(el => el.addEventListener('animationend', changeGalleryActive));
 
-  setTimeout(() => {
-    pageEls.project.classList.add('loaded');
-  }, 400);
+  // setTimeout(() => {
+  //   pageEls.project.classList.add('loaded');
+  // }, 400);
 }
 
 

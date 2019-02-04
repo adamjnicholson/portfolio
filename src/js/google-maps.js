@@ -9,7 +9,6 @@
     };
 
     let map = new google.maps.Map(mapDiv, args);
-    console.log(markerController)
     map.markers = markerController.activeMarkers.locations.map(marker => addMarker(marker, map));
 
 
@@ -55,7 +54,6 @@
   }
 
   const clearMarkers = () => {
-    console.log('clear');
     map.markers.forEach(el => el.setMap(null));
     map.markers = [];
   }
