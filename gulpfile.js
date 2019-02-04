@@ -51,6 +51,7 @@ gulp.task('sass', () => {
 
 gulp.task('js', () => {
   return gulp.src([
+    './src/js/global.js',
     './src/js/menu.js',
     './src/js/projects.js',
     './src/js/google-maps.js'
@@ -68,10 +69,13 @@ gulp.task('js', () => {
 });
 
 gulp.task('images', () => {
-  return gulp.src('./src/images/**/*')
-    .pipe(plumber({errorHandler: onError}))
-    .pipe(imagemin({optimizationLevel: 7, progressive: true}))
-    .pipe(gulp.dest('./dist/images'))
+  return gulp.src([
+    '!src/images/rocket.svg',
+    './src/images/**/*',
+  ])
+  .pipe(plumber({errorHandler: onError}))
+  .pipe(imagemin({optimizationLevel: 7, progressive: true}))
+  .pipe(gulp.dest('./dist/images'))
 });
 
 gulp.task('watch', function(){
@@ -81,7 +85,7 @@ gulp.task('watch', function(){
   })
   gulp.watch('./src/sass/**/*.scss', gulp.series(['sass', reload]));
   gulp.watch('./src/js/*.js', gulp.series(['js', reload]));
-  gulp.watch('./src/images/src/*', gulp.series(['images', reload]));
+  gulp.watch('./src/images/*', gulp.series(['images', reload]));
 });
 
 

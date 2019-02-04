@@ -19,12 +19,16 @@
 
   <body <?php body_class('natureworks'); ?>>
     <header>
-      <nav id="main-menu" class="expand"> 
+      <nav id="main-menu"> 
         <ul class="no-list">
-          <li><span class="absolute-center">&</span></li>
-          <li class="name right"><span class="absolute-center">Adam<br>Nicholson<br>Designs</span></li>
-          <li class="link"><span class="absolute-center">&</span></li>
-          <li class="link"><span class="absolute-center">&</span></li>
+          <li class="logo"><?php echo genSvg('and', 'absolute-center'); ?></li>
+          <li class="name">
+            <span>Adam</span>
+            <span>Nicholson</span>
+            <span>Designs</span>
+          </li>
+          <li class="link"><?php echo genSvg('rocket', 'absolute-center'); ?></li>
+          <li class="link"><?php echo genSvg('chat', 'absolute-center'); ?></li>
         </ul>
       </nav>
     </header>
