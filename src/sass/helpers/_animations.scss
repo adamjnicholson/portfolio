@@ -1,0 +1,53 @@
+@keyframes dash {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes from-bottom {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes from-top {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(0); }
+}
+
+@keyframes in-top {
+  from {top: -100%; left: 0}
+  to { top: 0; left: 0}
+}
+
+@keyframes in-right {
+  from {top: 0; left: 100%}
+  to { top: 0; left: 0}
+}
+
+@keyframes in-bottom {
+  from {top: 100%; left: 0}
+  to { top: 0; left: 0}
+}
+
+@keyframes in-left {
+  from {top: 0; left: -100%}
+  to { top: 0; left: 0}
+}
+
+@keyframes out-top {
+  from {top: 0; left: 0}
+  to {top: -100%; left: 0}
+}
+
+@keyframes out-right {
+  from {top: 0; left: 0}
+  to {top: 0; left: 100%}
+}
+
+@keyframes out-bottom {
+  from {top: 0; left: 0}
+  to {top: 100%; left: 0}
+}
+
+@keyframes out-left {
+  from {top: 0; left: 0}
+  to {top: 0; left: -100%}
+}

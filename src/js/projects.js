@@ -83,6 +83,9 @@ const loadProject = project => {
 
     document.body.classList.remove(...projectController.projectClasses);
     document.body.classList.add(project.class);
+    pageEls.menu.classList.remove(...projectController.projectClasses);
+    console.log()
+    pageEls.menu.classList.add(project.class);
     pageEls.project.classList.add('loaded');
   }, 1000);
 }
@@ -150,7 +153,8 @@ const pageEls = {
   magnifier: document.querySelector('#projects li.magnifier'),
   nextBtn: document.querySelector('#project-nav .next'),
   prevBtn: document.querySelector('#project-nav .prev'),
-  progressBar: document.querySelector('#projects aside .bar')
+  progressBar: document.querySelector('#projects aside .bar'),
+  menu: document.getElementById('main-menu');
 }
 
 // Infomation about each project
