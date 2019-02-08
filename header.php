@@ -19,7 +19,7 @@
 
   <body <?php body_class('natureworks'); ?>>
     <header>
-      <nav id="main-menu" class="landing"> 
+      <!-- <nav id="main-menu" class="landing"> 
         <ul class="no-list">
           <li class="logo"><?php echo genSvg('and', 'absolute-center'); ?></li>
           <li class="name">
@@ -30,7 +30,7 @@
           <li class="link"><?php echo genSvg('rocket', 'absolute-center'); ?></li>
           <li class="link"><?php echo genSvg('chat', 'absolute-center'); ?></li>
         </ul>
-      </nav>
+      </nav> -->
     </header>
 
     
