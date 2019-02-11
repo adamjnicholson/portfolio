@@ -25,7 +25,8 @@ get_header();
 
   $args = [
     'post_type' => 'project',
-    'posts_per_page' => -1
+    'posts_per_page' => -1,
+    'order' => 'ASC'
   ];
 
   $projects = new WP_Query($args);
@@ -45,13 +46,13 @@ get_header();
         'class' => get_field('project_class'),
         'url' => get_field('project_url'),
         'logo' => getImageUrl(get_field('project_logo')),
-        'mainImg' => get_the_post_thumbnail_url('full'),
+        'mainImg' => get_the_post_thumbnail_url(get_the_ID(), 'full'),
         'gallery' => getGalleryUrls(get_field('gallery'))
       ];
       $i++;
     endwhile; 
     ?>
-    <section id="projects" class="page-section active">
+    <section id="projects" class="page-section active <?php echo $projectInfo[0]['class']; ?>">
       <ul class="bg-image absolute-center no-list">
         <li class="absolute-cover active" <?php genBgImg($projectInfo[0]['mainImg']); ?>></li>
         <li class="absolute-cover"></li>
@@ -74,28 +75,28 @@ get_header();
           </div>
         </div>
         <div id="project-gallery">
-          <div class="gallery-inner">
+          <div class="gallery-images">
             <div class="gallery-image active" <?php genBgImg($projectInfo[0]['mainImg']); ?>></div>
             <div class="gallery-image"></div>
-            
-            <ul id="preview-container" class="no-list">
-              <?php foreach ($projectInfo[0]['gallery'] as $img) : ?>
-                <li><div class="preview-image" <?php genBgImg($img); ?>></div></li>
-              <?php endforeach; ?>
-              <li class="magnifier"></li>
-            </ul>
           </div>
+            
+          <ul id="preview-container" class="no-list">
+            <?php foreach ($projectInfo[0]['gallery'] as $img) : ?>
+              <li><div class="preview-image" <?php genBgImg($img); ?>></div></li>
+            <?php endforeach; ?>
+            <li class="magnifier"></li>
+          </ul>
         </div>
         <nav id="project-nav">
-          <ul id="arrow" class="no-list">
-            <li class="next"><?php echo genSvg('icon-arrow-right', 'absolute-center'); ?></span></li>
-            <li class="prev disabled"><?php echo genSvg('icon-arrow-left', 'absolute-center'); ?></li>
+          <ul id="arrows" class="no-list">
+            <li class="next square"><?php echo genSvg('icon-arrow-right', 'absolute-center'); ?></span></li>
+            <li class="prev square disabled"><?php echo genSvg('icon-arrow-left', 'absolute-center'); ?></li>
           </ul>
           <div id="progress-bar-container">
             <div class="progress-inner">
-            <div id="bar"></div>
-            <div id="current">01</div>
-            <div id="total"><?php echo count($projectInfo); ?></div>
+              <div id="bar"><div class="banner-inner"></div></div>
+              <div id="current">01</div>
+              <div id="total">0<?php echo count($projectInfo); ?></div>
             </div>
           </div>
         </nav>

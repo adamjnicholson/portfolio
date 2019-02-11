@@ -200,5 +200,9 @@
 
 // init();
 
+setTimeout( () => {
+  document.getElementById('projects').classList.add('loaded');
+}, 400)
+
 
 

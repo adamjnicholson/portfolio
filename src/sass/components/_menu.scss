@@ -5,13 +5,12 @@ nav#main-menu {
   left: 0;
   z-index: 999999;
   ul {
-    display: grid;
-    grid-template-columns: $square $square;
+    display: flex;
   }
   li {
     position: relative;
-    min-width: $square;
-    height: $square;
+    min-width: $med-square;
+    height: $med-square;
     color: $white;
     grid-column-start: 1;
     transition: $animate;
@@ -41,6 +40,7 @@ nav#main-menu {
       display:flex;
       flex-direction: column;
       justify-content: center;
+      font-size: .9rem;
       transform: translateX(-100%);
       span {
         line-height: 1.3
@@ -93,6 +93,32 @@ nav#main-menu {
   &.landing li,
   &.map li {
     background-color: $light-purple;
+  }
+}
+
+@media (min-width: 768px) {
+  nav#main-menu {
+    ul {
+      display: grid;
+      grid-template-columns: $med-square $med-square;
+      li {
+        min-width: $med-square;
+        height: $med-square;
+      }
+    }
+  }
+}
+
+@media (min-width: 1440px) {
+  nav#main-menu {
+    ul {
+      display: grid;
+      grid-template-columns: $square $square;
+      li {
+        min-width: $square;
+        height: $square;
+      }
+    }
   }
 }
 

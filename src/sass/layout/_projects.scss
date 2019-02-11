@@ -1,155 +1,229 @@
-// $project-number: 0;
-// $project-title: .2;
-// $content-p: .4;
-// $content-button: .6;
-// $left-max: .6;
-
-// $logo: .4;
 
 
+$project-number: 0;
+$project-title: .2;
+$content-p: .4;
+$content-button: .6;
+$left-max: .6;
 
-// #projects {
-//   width: 100%;
-//   height: 100vh;
+$logo: .4;
+
+
+#projects {
+  position: relative;
+  #title-container {
+    position: relative;
+    margin-top: $med-square;
+  }
+  #project-number {
+    font-size: 6rem;
+    max-height: 115px;
+    transform: translateY(-.5em);
+    opacity: 0;
+    transition: all .3s ease-out $left-max - $project-number + 0s;
+  }
+  #project-title {
+    font-size: 2.375rem;
+    position: absolute;
+    left: .75em;
+    bottom: 0;
+    opacity: 0;
+    transition: all .3s ease-out $left-max - $project-title + 0s;
+  }
+  #content-container {
+    padding: 0 1rem;
+    max-width: 660px;
+    p, .button {
+      transform: translateX(-2rem);
+      opacity: 0;
+      transition: all .3s ease-in-out;
+    }
+    p {
+      transition-delay: $left-max - $content-p + 0s
+    }
+    .button {
+      transition-delay: $left-max - $content-button + 0s
+    }
+  }
+  .button {
+    background-color: $white;
+  }
+  aside {
+    height: 100vh;
+    padding-bottom: $small-square;
+  }
+  #logo {
+    position: absolute;
+    top: $med-square;
+    right: .5rem;
+    width: 20%;
+    max-width: 100px;
+    .image {
+      transform: scale(0);
+      transition: all .3s ease-in-out $logo + 0s;
+    }
+  }
+}
+
+#projects.loaded {
+  #project-number {
+    padding-left: .5rem;
+    transform: translateY(0);
+    opacity: .33;
+    transition-delay: $project-number + 0s;
+  }
+  #project-title {
+    left: 1em;
+    opacity: 1;
+    transition-delay: $project-title + 0s;
+
+  }
+  #content-container {
+    p, .button {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    p {
+      transition-delay: $content-p + 0s;
+    }
+    .button {
+      transition-delay: $content-button + 0s;
+    }
+  }
+  #logo {
+    .image {
+      transform: scale(1);
+    }
+  }
+}
+
+
+#projects {
+  @each $project in $projects {
+    $mainColour: nth($project, 2);
+    $lightColour: nth($project, 3);
+
+    &.#{nth($project, 1)} {
+      background-color: #{nth($project, 2)};
+      &:after {
+        background: linear-gradient(to right, rgba(0,0,0,0) 0%, $mainColour 70%);
+      }
+      .button {
+        color: $mainColour;
+        svg path {
+          fill: $mainColour;
+        }
+      }
+      #bar,
+      #logo {
+        background-color: $mainColour;
+      }
+      #preview-container li.magnifier {
+        background-color: rgba($lightColour, .5);
+      }
+      #progress-bar-container,
+      #arrows li {
+        background-color: $lightColour;
+      }
+    }
+  }
+}
   
- 
-//   article {
-//     padding-left: 6vw;
-//     padding-top: 10vh;
-//     .title {
-//       position: relative;
-//       margin-bottom: 7rem;
-//       #project-number {
-//         display: block;
-//         transform: translateY(-.5em);
-//         opacity: 0;
-//         transition: all .3s ease-out $left-max - $project-number + 0s;
-//       }
-//       #project-title {
-//         font-size: 100px;
-//         position: absolute;
-//         left: .75em;
-//         bottom: -25%;
-//         opacity: 0;
-//         transition: all .3s ease-out $left-max - $project-title + 0s;
-//       }
-//     }
-//     .content {
-//       padding-left: 15%;
-//       max-width: 800px;
-//       p, .button {
-//         transform: translateX(-2rem);
-//         opacity: 0;
-//         transition: all .3s ease-in-out;
-//       }
-//       p {
-//         transition-delay: $left-max - $content-p + 0s
-//       }
-//       .button {
-//         background-color: $white;
-//         transition-delay: $left-max - $content-button + 0s
-//       }
-//     }
-//   }
-//   aside {
-//     position: relative;
-//     .logo {
-//       width: 12.5rem;
-//       height: 12.5rem;
-//       padding: 1.25rem;
-//       position: absolute;
-//       top: 0;
-//       right: 0;
-//       z-index: 10;
-//       border-bottom-left-radius: $square;
-//       .image {
-//         height: 100%;
-//         position: relative;
-//       transform: scale(0);
-//         transition: all .3s ease-in-out $logo + 0s;
 
-//       }
-//       img {
-//         @include absolute-center;
-//       }
-//     }
-//   }
-// }
+@media (min-width: 768px) {
+  #projects {
+    article {
+      padding-left: $med-square;
+    }
+    #title-container {
+      padding-left: 3rem;
+    }
+    #project-number {
+      font-size:  6.875rem;
+      padding-left: 0;
+      margin-left: -.5rem;
+    }
+    #project-title {
+      font-size: 4.25rem;
+      bottom: -1.5rem;
+      left: 4.25rem;
+    }
+    #content-container {
+      max-width: 700px;
+      padding: 0 3rem 0 6rem;
+      margin-top: 3rem;
+    }
+    aside {
+      padding-bottom: $med-square;
+      padding-left: $med-square;
+      margin-top: $small-square;
+    }
+  }
 
-// #projects.loaded {
-//   article {
-//     .title {
-//       #project-number {
-//         transform: translateY(0);
-//         opacity: .33;
-//         transition-delay: $project-number + 0s;
-//       }
-//       #project-title {
-//         left: 1em;
-//         opacity: 1;
-//         transition-delay: $project-title + 0s;
-//       }
-//     }
-//     .content {
-//       p, .button {
-//         opacity: 1;
-//         transform: translateX(0);
-//       }
-//       p {
-//         transition-delay: $content-p + 0s;
-//       }
-//       .button {
-//         transition-delay: $content-button + 0s;
-//       }
-//     }
-//   }
-//   aside {
-//     .logo .image{
-//       transform: scale(1);
-//     }
-//   }
-// }
+  #projects.loaded {
+    #project-number {
+      padding-left: 0;
+      margin-left: 0;
+    }
+    #project-title {
+      left: 5rem;
+    }
+  }
+}
 
+@media (min-width: 1024px) {
+  #projects {
+    #content-container {
+      padding-left: $small-square;
+      margin-left: auto;
+    }
+    aside {
+      position: relative;
+      height: auto;
+      min-height: 100vh;
+      margin-top: 0;
+      padding: $small-square 0 $med-square $med-square;
+    }
+    #logo {
+      top: 0;
+      right: 0;
+      width: 8rem;
+      height: 8rem;
+      max-width: none;
+      z-index: 10;
+      border-bottom-left-radius: 50%;
+      border-bottom-right-radius: 50%;
+      padding: .5rem;
+      img {
+        margin: 0 auto;
+      }
+    }
 
+  }
+}
 
-// @each $project in $projects {
-//   $mainColour: nth($project, 2);
-//   $lightColour: nth($project, 3);
-
-//   .#{nth($project, 1)} {
-//     #projects {
-//     background-color: #{nth($project, 2)};
-//       &:after {
-//         background: linear-gradient(to right, rgba(0,0,0,0) 0%, $mainColour 70%);
-//       }
-//       article .content .button {
-//         color: $mainColour;
-//         svg path {
-//           fill: $mainColour;
-//         }
-//       }
-//       aside .bar,
-//       aside .logo {
-//         background-color: $mainColour;
-//       }
-//       aside {
-//         .gallery-container ul.preview-container li.magnifier {
-//           background-color: rgba($lightColour, .5);
-//         }
-//         nav ul.arrows,
-//         .progress {
-//           background-color: $lightColour;
-//         } 
-//       } 
-//     }
-//   }
-// }
-
-
-
-
-
-
-
-
-
+@media (min-width: 1440px) {
+  #projects {
+    article {
+      padding-left: $square;
+    }
+    #title-container {
+      margin-top: $square;
+    }
+    #project-title {
+      left: $square;
+    }
+    #content-container {
+      padding-left: 6rem;
+    }
+    aside {
+      padding: $square $med-square $square $square;
+    }
+    #logo {
+      width: 10rem;
+      height: 10rem;
+      padding: 1rem;
+      margin-left: auto;
+    }
+  }
+}

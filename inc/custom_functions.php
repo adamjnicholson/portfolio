@@ -2,7 +2,7 @@
   function debug($data = '', $type = 'echo'){
       $html = '';
 
-      $html .= '<pre style="padding: 15px; font-family: \'courier new\'; font-size: 12px; border: 1px dashed #800">';
+      $html .= '<pre style="padding: 15px; font-family: \'courier new\'; font-size: 12px; border: 1px dashed #800 background-color: #FFF; color: #000;">';
         $html .= print_r($data, true);
       $html .= '</pre>';
 
