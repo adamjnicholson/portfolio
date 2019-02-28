@@ -51,11 +51,12 @@ gulp.task('sass', () => {
 
 gulp.task('js', () => {
   return gulp.src([
-    './src/js/global.js',
-    './src/js/sections.js',
+    // './src/js/global.js',
+    // './src/js/sections.js',
     './src/js/menu.js',
-    './src/js/projects.js',
-    './src/js/google-maps.js'
+    // './src/js/projects.js',
+    // './src/js/google-maps.js'
+    './src/js/controller.js'
   ])
   .pipe(babel())
   .pipe(jshint())

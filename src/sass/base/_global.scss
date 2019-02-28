@@ -74,6 +74,7 @@ input[type="submit"] {
     content: '';
     @include absolute-cover;
     pointer-events: none;
+    transition: $animate;
   }
   .bg-image {
     height: 100%;
@@ -81,6 +82,9 @@ input[type="submit"] {
     li {
       opacity: 0;
       transition: opacity .3s ease-out;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: cover;
       &.active {
         opacity: .2;
       }

@@ -17,9 +17,9 @@
   </head>
 
 
-  <body <?php body_class('natureworks'); ?>>
+  <body <?php body_class('landing'); ?>>
     <header>
-      <nav id="main-menu" class="landing"> 
+      <nav id="main-menu"> 
         <ul class="no-list">
           <li class="logo"><?php echo genSvg('and', 'absolute-center'); ?></li>
           <li class="name">

@@ -38,6 +38,7 @@
       width: 100%;
       display: flex;
       overflow: hidden;
+      z-index: 3;
       li {
         position: relative;
         width: 100%;
@@ -81,9 +82,9 @@
             transition-delay:  ($i * .1) + .3s;
           }
         }
-        &:hover li.magnifier {
-          opacity: 1;
-        }
+      }
+      &:hover li.magnifier {
+        opacity: .5;
       }
     }
   }

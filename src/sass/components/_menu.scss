@@ -89,12 +89,9 @@ nav#main-menu {
       transform: translate(0, 0);
     }
   }
-
-  &.landing li,
-  &.map li {
-    background-color: $light-purple;
-  }
 }
+
+
 
 @media (min-width: 768px) {
   nav#main-menu {

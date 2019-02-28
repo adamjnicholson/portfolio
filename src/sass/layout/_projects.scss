@@ -10,7 +10,6 @@ $logo: .4;
 
 
 #projects {
-  position: relative;
   #title-container {
     position: relative;
     margin-top: $med-square;
@@ -58,6 +57,8 @@ $logo: .4;
     right: .5rem;
     width: 20%;
     max-width: 100px;
+    display: flex;
+    align-items: center;
     .image {
       transform: scale(0);
       transition: all .3s ease-in-out $logo + 0s;
@@ -97,38 +98,6 @@ $logo: .4;
   }
 }
 
-
-#projects {
-  @each $project in $projects {
-    $mainColour: nth($project, 2);
-    $lightColour: nth($project, 3);
-
-    &.#{nth($project, 1)} {
-      background-color: #{nth($project, 2)};
-      &:after {
-        background: linear-gradient(to right, rgba(0,0,0,0) 0%, $mainColour 70%);
-      }
-      .button {
-        color: $mainColour;
-        svg path {
-          fill: $mainColour;
-        }
-      }
-      #bar,
-      #logo {
-        background-color: $mainColour;
-      }
-      #preview-container li.magnifier {
-        background-color: rgba($lightColour, .5);
-      }
-      #progress-bar-container,
-      #arrows li {
-        background-color: $lightColour;
-      }
-    }
-  }
-}
-  
 
 @media (min-width: 768px) {
   #projects {

@@ -52,7 +52,17 @@ get_header();
       $i++;
     endwhile; 
     ?>
-    <section id="projects" class="page-section active <?php echo $projectInfo[0]['class']; ?>">
+    <script type='text/javascript'>
+      <?php echo 'var projects = ' . json_encode($projectInfo) . ';'; ?>
+    </script>
+    <section id="landing" class="page-section active">
+      <div class="content absolute-center">
+        <?php echo genSvg('lg-logo', 'absolute-center'); ?>
+        <h2>Hi! I'm Adam</h2>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam dictum massa quis mollis varius. Vivamus pellentesque odio at vestibulum luctus. Quisque congue ex felis, semper fringilla tortor euismod in. Donec vitae fringilla est. </p>
+      </div>
+    </section>
+    <section id="projects" class="page-section <?php echo $projectInfo[0]['class']; ?>">
       <ul class="bg-image absolute-center no-list">
         <li class="absolute-cover active" <?php genBgImg($projectInfo[0]['mainImg']); ?>></li>
         <li class="absolute-cover"></li>
@@ -94,7 +104,7 @@ get_header();
           </ul>
           <div id="progress-bar-container">
             <div class="progress-inner">
-              <div id="bar"><div class="banner-inner"></div></div>
+              <div id="bar"><div class="bar-inner"></div></div>
               <div id="current">01</div>
               <div id="total">0<?php echo count($projectInfo); ?></div>
             </div>

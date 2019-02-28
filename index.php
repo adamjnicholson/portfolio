@@ -6,13 +6,13 @@
 get_header(); ?>
 
 <?php $images = get_stylesheet_directory_uri() . '/dist/images/'; ?>
-<!-- <section id="landing" class="page-section active">
+<section id="landing" class="page-section active">
   <div class="content absolute-center">
     <?php echo genSvg('lg-logo', 'absolute-center'); ?>
     <h2>Hi! I'm Adam</h2>
     <P>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam dictum massa quis mollis varius. Vivamus pellentesque odio at vestibulum luctus. Quisque congue ex felis, semper fringilla tortor euismod in. Donec vitae fringilla est. </P>
   </div>
-</section> -->
+</section>
 <section id="projects" class="page-section">
   <ul class="bg-image absolute-cover no-list">
     <li class="absolute-cover active" style="background: url('<?php echo $images . 'forest-edited.jpg'; ?>') no-repeat 0% center / cover"></li>
