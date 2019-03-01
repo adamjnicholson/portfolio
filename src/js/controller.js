@@ -35,71 +35,130 @@
 
       this.globalEls = globalEls;
       this.scrolling = false;
+      this.deviceType = this.helpers.getDeviceType();
+
+      this.resizeTimeout = false;
+      this.resizeDelay = 250;
+
+      this.scrollY = window.scrollY;
 
       this.initEventListeners();
     }
 
     initEventListeners() {
-      window.addEventListener('wheel', this.scrolled.bind(this));
+      window.addEventListener('resize', this.debounceResize.bind(this) );
+      window.addEventListener('scroll', this.wheelScrolled.bind(this));
+      window.addEventListener('wheel', this.wheelScrolled.bind(this));
+
       this.globalEls.logoPath.addEventListener('animationend', this.loadHomePage.bind(this));
-      this.sections.forEach(el => el.el.addEventListener('animationend', this.afterScrolled.bind(this)));
+      this.sections.forEach(el => el.el.addEventListener('animationend', this.endSectionScrolling.bind(this)));
       this.globalEls.menuLis.forEach(el => el.addEventListener('click', this.menuSection.bind(this)));
     }
 
-    loadHomePage() {
-      this.sections[this.activeSectionIndex].toggleClass('loaded', true);
-      this.globalEls.menu.classList.add('expand');
+    debounceResize() {
+      clearTimeout(this.resizeTimeout);
+      this.resizeTimeout = setTimeout(this.windowResize.bind(this), this.resizeDelay);
     }
 
-    scrolled(e) {
-      window.scrollTo( 0, 0 );
+    windowResize() {
+      const prevDevice = this.deviceType;
+      this.deviceType = this.helpers.getDeviceType();
 
-      if (!this.scrolling) {
-        this.scrolling = true;
-        if (e.deltaY < 0 && this.activeSectionIndex > 0) { // up
-          this.activeSectionIndex--;
-          this.showSection(-1);
-        } else if (e.deltaY > 0 && this.activeSectionIndex < this.sections.length - 1) { //down
-          this.activeSectionIndex++;
-          this.showSection(1);
+      if (prevDevice !== this.deviceType) {
+        if (this.deviceType === 'desktop') {
+          window.scrollTo(0, 0);
+        } else if (this.deviceType === 'mobile') {
+          window.scrollTo(0, this.activeSection.el.getBoundingClientRect().top)
         }
       }
     }
 
-    showSection(direction) {
-      const dirClass = direction > 0 ? 'from-bottom' : 'from-top';
-      this.activeSection = this.sections[this.activeSectionIndex];
+    wheelScrolled(e) {
+      if (this.deviceType === 'mobile') {
+        this.mobileScroll();
+      } else {
+        if (this.scrolling) return;
 
-      this.activeSection.toggleClass(dirClass, true);
+        window.scrollTo( 0, 0 );
+        if (e.deltaY < 0 && this.activeSectionIndex > 0) { // up
+          this.activeSectionIndex--;
+          this.startSectionScrolling(-1);
+        } else if (e.deltaY > 0 && this.activeSectionIndex < this.sections.length - 1) { //down
+          this.activeSectionIndex++;
+          this.startSectionScrolling(1);
+        }
+      }
+      this.scrollY = window.scrollY;
     }
 
-    afterScrolled(e) {
-      if (e.animationName === 'from-bottom' || e.animationName === 'from-top') {
-        this.sections.forEach(el => el.el.classList.remove('active')); 
-        if (this.activeSectionIndex === 1)  {
-          this.helpers.swapBodyClass(this.projectCtrl.projectData[this.projectCtrl.currentProject].class);
-        } else {
-          this.helpers.swapBodyClass(this.activeSection.getId());
+    mobileScroll() {
+      const dir = this.scrollY < window.scrollY ? 'down' : 'up';
+      
+      if (
+        dir === 'down' && 
+        this.activeSectionIndex < this.sections.length - 1 &&
+        this.activeSection.el.getBoundingClientRect().top < (document.documentElement.clientHeight / 2) * -1
+      ) {
+          this.activeSectionIndex++;
+          this.activeSection = this.sections[this.activeSectionIndex];
+          this.changeSectionClasses();
         }
-        this.activeSection.el.classList.add('active', 'loaded');
-        this.activeSection.el.classList.remove('from-bottom', 'from-top');
+      else if (
+        dir == 'up' &&
+        this.activeSectionIndex > 0 &&
+        this.activeSection.el.getBoundingClientRect().top > document.documentElement.clientHeight / 2
+      ) {
+        this.activeSectionIndex--;
+        this.activeSection = this.sections[this.activeSectionIndex];
+        this.changeSectionClasses();
+      }
+    }
+
+    loadHomePage() {
+      this.activeSection.el.classList.add('loaded');
+      // this.globalEls.menu.classList.add('expand');
+    }
+
+    startSectionScrolling(direction) {
+      const dirClass = direction > 0 ? 'from-bottom' : 'from-top';
+
+      this.scrolling = true;
+      this.activeSection = this.sections[this.activeSectionIndex];
+
+      this.activeSection.el.classList.add(dirClass);
+    }
+
+    endSectionScrolling(e) {
+      if (e.animationName === 'from-bottom' || e.animationName === 'from-top') {
+        this.changeSectionClasses();
         this.scrolling = false;
       }
     }
 
+    changeSectionClasses() {
+      this.sections.forEach(section => section.el.classList.remove('active')); 
+      if (this.activeSectionIndex === 1)  {
+        this.helpers.swapBodyClass(this.projectCtrl.projectData[this.projectCtrl.activeProjectIndex].class);
+      } else {
+        this.helpers.swapBodyClass(this.activeSection.getId());
+      }
+      this.activeSection.el.classList.add('active', 'loaded');
+      this.activeSection.el.classList.remove('from-bottom', 'from-top');
+    }
+
     menuSection(e) {
     // get section index both menuLi 0 & 1 should go to section 0
-    const clickedSquare = this.helpers.findLiIndex(this.globalEls.menuLis, e.target);
-    const targetSection = Math.max(clickedSquare - 1, 0);
+    // const clickedSquare = this.helpers.findLiIndex(this.globalEls.menuLis, e.target);
+    // const targetSection = Math.max(clickedSquare - 1, 0);
     
     
-    if (targetSection < this.activeSectionIndex) {
-      this.activeSectionIndex = targetSection;
-      this.showSection(-1);
-    } else if (targetSection > this.activeSectionIndex) {
-      this.activeSectionIndex = targetSection;
-      this.showSection(1);
-    }
+    // if (targetSection < this.activeSectionIndex) {
+    //   this.activeSectionIndex = targetSection;
+    //   this.startSectionScrolling(-1);
+    // } else if (targetSection > this.activeSectionIndex) {
+    //   this.activeSectionIndex = targetSection;
+    //   this.startSectionScrolling(1);
+    // }
 
     }
   }
@@ -110,7 +169,7 @@
       this.projectData = projectData;
       this.els = projectEls;
       this.projectClasses = this.projectData.map(el => el.class);
-      this.currentProject = 0;
+      this.activeProjectIndex = 0;
       this.galleryImageActive = -1;
 
       this.initEventListeners();
@@ -128,59 +187,46 @@
       this.els.galleryImages.forEach(el => el.addEventListener('animationend', this.changeGalleryActive.bind(this)));
     }
 
-
-    toggleLoaded(add) {
-      if (add) {
-        this.els.projectContainer.classList.add('loaded');
-      } else {
-        this.els.projectContainer.classList.remove('loaded');
-      }
-    }
-
     disabledBtns() {
       this.els.prevBtn.classList.remove('disabled');
       this.els.nextBtn.classList.remove('disabled');
 
-      if (this.currentProject === 0) {
+      if (this.activeProjectIndex === 0) {
         this.els.prevBtn.classList.add('disabled');
       }
 
-      if (this.currentProject === this.projectData.length - 1) {
+      if (this.activeProjectIndex === this.projectData.length - 1) {
         this.els.nextBtn.classList.add('disabled');
       }
     }
 
     loadProject(direction, e) {
       if (!e.target.classList.contains('disabled')) {
-        this.setCurrentProject(direction);
+        this.setActiveProjectIndex(direction);
         this.disabledBtns();
-        this.toggleLoaded(false);
-        this.changeContent(this.projectData[this.currentProject]);
+        this.els.projectContainer.classList.remove('loaded');
+        this.changeContent(this.projectData[this.activeProjectIndex]);
       }
     }
 
-    setCurrentProject(direction) {      
-      const start = this.currentProject;
-
-      this.currentProject += direction;
-      if (this.currentProject < 0) {
-        this.currentProject = 0;
+    setActiveProjectIndex(direction) {      
+      this.activeProjectIndex += direction;
+      if (this.activeProjectIndex < 0) {
+        this.activeProjectIndex = 0;
       }
 
-      if (this.currentProject > this.projectData.length - 1) {
-        this.currentProject = this.projectData.length - 1;
+      if (this.activeProjectIndex > this.projectData.length - 1) {
+        this.activeProjectIndex = this.projectData.length - 1;
       }
-      return start !== this.currentProject;
     }
 
     changeContent(project) {
       const btn = [...this.els.desc.childNodes].find(el => el.tagName === 'A');
-
       btn.href = project.url;
 
       setTimeout(() => {
         this.helpers.swapBgImg(this.els.bgImage, project.mainImg);
-        this.els.projectNumber.textContent = `0${this.currentProject + 1}`;
+        this.els.projectNumber.textContent = `0${this.activeProjectIndex + 1}`;
         this.els.projectTitle.textContent = project.title;
         this.els.desc.innerHTML = project.desc;
         this.els.desc.appendChild(btn);
@@ -198,8 +244,8 @@
           this.helpers.setBgImg(el, project.gallery[i])
         });
         
-        this.els.curProjectNum.textContent = `0${this.currentProject + 1}`;
-        this.els.progressBar.style.width = (100 / this.projectData.length) * (this.currentProject + 1) + '%';
+        this.els.curProjectNum.textContent = `0${this.activeProjectIndex + 1}`;
+        this.els.progressBar.style.width = (100 / this.projectData.length) * (this.activeProjectIndex + 1) + '%';
 
         this.els.projectContainer.classList.remove(...this.projectClasses);
         this.els.projectContainer.classList.add(project.class);
@@ -207,7 +253,7 @@
         this.helpers.swapBodyClass(project.class);
 
         setTimeout(() => {
-          this.toggleLoaded(true);
+          this.els.projectContainer.classList.add('loaded');
         }, 100);
       }, 1000);
     }
@@ -222,8 +268,8 @@
       if (this.galleryImageActive !== targetIndex) {
         const inActive = this.els.galleryImages[[...this.els.galleryImages].findIndex(el => !el.classList.contains('active'))];
         const direction = this.galleryImageActive < targetIndex ? 'in-left' : 'in-right';
+        
         inActive.style.zIndex = 2;
-        console.log( e.target.style.backgroundImage)
         inActive.style.backgroundImage = e.target.style.backgroundImage;
         inActive.classList.add(direction);
       
@@ -244,17 +290,12 @@
     constructor(el, i) {
       this.el = el;
       this.index = i;
-    }
-    getId() {
-      return this.el.id;
+      this.top = false;
+      this.height = false;
     }
 
-    toggleClass(theClass, add) {
-      if (add) {
-        this.el.classList.add(theClass);
-      } else {
-        this.el.classList.remove(theClass);
-      }
+    getId() {
+      return this.el.id;
     }
 
     removeDirections() {
@@ -265,9 +306,9 @@
   class Helpers {
     constructor(bodyClasses) {
       this.bodyClasses = bodyClasses;
-      this.body = document.getElementsByTagName("body")[0]
-      console.log(bodyClasses);
+      this.body = document.getElementsByTagName("body")[0];
     }
+
     setBgImg(el, img) {
       el.style.backgroundImage = `url('${img}')`;
     }
@@ -286,6 +327,14 @@
     findLiIndex(group, target) {
       return [...group].findIndex(el => target == el)
     }
+
+    getDeviceType() {
+      const windowW = document.documentElement.clientWidth;
+      if (windowW < 768) {
+        return 'mobile';
+      }
+      return 'desktop';
+    }
   }
 
 
@@ -297,3 +346,4 @@
   const mainController = new Controller(projectController, helpers, sections, globalEls);
 
 }
+

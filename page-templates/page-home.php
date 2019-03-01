@@ -32,6 +32,9 @@ get_header();
   $projects = new WP_Query($args);
   $projectInfo = [];
 
+  $mapID = 34;
+  $mapPage = get_post($mapID);
+  $mapContent = apply_filters('the_content', $mapPage->post_content); 
 
 ?>
 
@@ -50,16 +53,15 @@ get_header();
         'gallery' => getGalleryUrls(get_field('gallery'))
       ];
       $i++;
-    endwhile; 
+    endwhile; endif; wp_reset_postdata();
     ?>
     <script type='text/javascript'>
       <?php echo 'var projects = ' . json_encode($projectInfo) . ';'; ?>
     </script>
     <section id="landing" class="page-section active">
+    <?php echo genSvg('lg-logo', 'absolute-center'); ?>
       <div class="content absolute-center">
-        <?php echo genSvg('lg-logo', 'absolute-center'); ?>
-        <h2>Hi! I'm Adam</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam dictum massa quis mollis varius. Vivamus pellentesque odio at vestibulum luctus. Quisque congue ex felis, semper fringilla tortor euismod in. Donec vitae fringilla est. </p>
+        <?php the_content(); ?>
       </div>
     </section>
     <section id="projects" class="page-section <?php echo $projectInfo[0]['class']; ?>">
@@ -113,7 +115,8 @@ get_header();
       </aside>
     </div>
   </section>
-<?php endif; ?>
+
+
 
 
 

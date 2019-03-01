@@ -55,10 +55,6 @@ input[type="submit"] {
   position: relative;
   width: 100%;
   min-height: 100vh;
-  position: absolute;
-  top: 0;
-  left: 0;
-  transform: translateY(100%);
   &.from-bottom {
     z-index: 10;
     animation: from-bottom .3s ease-out 0s 1 forwards
@@ -102,5 +98,14 @@ input[type="submit"] {
   input[type="submit"] {
     padding: 1.25rem 4.5rem;
   }
-
 }
+@media (min-width: 1024px) {
+  .page-section {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translateY(100%);
+
+  }
+}
+

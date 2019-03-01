@@ -1,22 +1,10 @@
 #landing {
   background-color: $purple;
-  .bg-image li{
-    display: grid;
-    grid-template-columns: repeat(21, 1fr);
-    grid-template-rows: repeat(9, 1fr);
-    .hover-square {
-      width: 100%;
-      height: 100%;
-      transition: all .1s;
-      &:hover {
-        background-color: $light-purple;
-      }
-    }
-  }
   .content {
+    width: 100%;
     max-width: 660px;
     text-align: center;
-    padding-top: 4rem;
+    padding: 4rem 1rem 0 1rem;
     h2, p {
       opacity: 0;
       transform: translateY(1rem);
@@ -32,16 +20,20 @@
   }
   .icon {
     transition: $animate;
+    width: 100%;
+    display: flex;
+    justify-content: center;
     svg {
       width: 20rem;
       height: 20rem;
+      transform-origin: center;
       transition: $animate;
     }
     path {
       stroke-dasharray: 133;
       stroke-dashoffset: 133;
       stroke-width: 1px;
-      animation: dash .7s linear 2s 1 forwards;
+      animation: dash .7s linear 0s 1 forwards;
       fill: $clear;
       transition: $animate;
       &:last-child {
