@@ -22,15 +22,16 @@ $logo: .4;
     transition: all .3s ease-out $left-max - $project-number + 0s;
   }
   #project-title {
-    font-size: 2.375rem;
     position: absolute;
     left: .75em;
     bottom: 0;
     opacity: 0;
+    margin-bottom: 0;
     transition: all .3s ease-out $left-max - $project-title + 0s;
   }
   #content-container {
     padding: 0 1rem;
+    margin-top: 2rem;
     max-width: 660px;
     p, .button {
       transform: translateX(-2rem);
@@ -41,6 +42,7 @@ $logo: .4;
       transition-delay: $left-max - $content-p + 0s
     }
     .button {
+      margin-top: 1rem;
       transition-delay: $left-max - $content-button + 0s
     }
   }
@@ -113,7 +115,6 @@ $logo: .4;
       margin-left: -.5rem;
     }
     #project-title {
-      font-size: 4.25rem;
       bottom: -1.5rem;
       left: 4.25rem;
     }
@@ -159,7 +160,7 @@ $logo: .4;
       width: 8rem;
       height: 8rem;
       max-width: none;
-      z-index: 10;
+      z-index: 15;
       border-bottom-left-radius: 50%;
       border-bottom-right-radius: 50%;
       padding: .5rem;

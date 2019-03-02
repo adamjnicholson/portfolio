@@ -9,12 +9,12 @@
   }
 
   const raiseLabel = e => {
-    e.target.parentNode.classList.add('active');
+    e.target.parentNode.parentNode.classList.add('active');
   }
 
   const lowerLabel = e => {
     if (e.target.value === '') {
-      e.target.parentNode.classList.remove('active');
+      e.target.parentNode.parentNode.classList.remove('active');
     }
   }
 
@@ -22,20 +22,11 @@
     e.target.classList.toggle('active');
   }
 
-  const loadHomePage = () => {
-    setTimeout(() => {
-      globalEls.landing.classList.add('loaded');
-      globalEls.menu.classList.add('expand');
-  },200)
-  }
-
   const init = () => {
     globalEls.inputs.forEach(el => {
       el.addEventListener('focus', raiseLabel);
       el.addEventListener('blur', lowerLabel);
     });
-
-    globalEls.logoPath.addEventListener('animationend', loadHomePage)
 
     globalEls.toggles.forEach(el => el.addEventListener('click', toggleToggle));
   }

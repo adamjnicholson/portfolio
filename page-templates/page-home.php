@@ -115,6 +115,23 @@ get_header();
       </aside>
     </div>
   </section>
+  <section id="map" class="page-section">
+    <ul class="bg-image absolute-cover no-list">
+      <li class="absolute-cover active"></li>
+    </ul>
+    <div class="col-2">
+      <aside>
+        <div class="marker-toggle">
+          <?php echo genSvg('coffee'); ?>
+          <div class="toggle"></div>
+          <?php echo genSvg('beer'); ?>
+        </div>
+      </aside>
+      <article>
+        <?php echo $mapContent; ?>
+      </article>
+    </div>
+  </section>
 
 
 

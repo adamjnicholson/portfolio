@@ -13,7 +13,7 @@ nav#main-menu {
     height: $med-square;
     color: $white;
     grid-column-start: 1;
-    transition: $animate;
+    transition: transform .3s ease-out, background-color .3 ease-out;
     overflow: hidden;
     &:hover {
       .icon svg {
@@ -41,7 +41,6 @@ nav#main-menu {
       flex-direction: column;
       justify-content: center;
       font-size: .9rem;
-      transform: translateX(-100%);
       span {
         line-height: 1.3
       }
@@ -59,12 +58,12 @@ nav#main-menu {
     }
 
         
-    $start: 3;
+    $start: 2;
     $end: 4;
     @for $i from $start through $end {
       &:nth-child(#{$i}) {
-        transform: translateY(-($i - $start + 1) * 100%);
-        transition-duration: ($i * .3) + 0s;
+        transform: translate(-($i - $start + 2) * 100%, 0);
+        transition: transform  ($i * .2) + 0s ease-out, background-color ($i * .3) + 0s ease-out;
         z-index: 10 - $i;
       }
     }
@@ -86,7 +85,7 @@ nav#main-menu {
   }
   &.expand {
     li {
-      transform: translate(0, 0);
+      transform: translate(0, 0) !important;
     }
   }
 }
@@ -101,6 +100,13 @@ nav#main-menu {
       li {
         min-width: $med-square;
         height: $med-square;
+        $start: 3;
+        $end: 4;
+        @for $i from $start through $end {
+          &:nth-child(#{$i}) {
+            transform: translate(0, -($i - $start + 1) * 100%);
+          }
+        }
       }
     }
   }

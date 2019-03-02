@@ -31,18 +31,22 @@
 
       this.sections = sections;
       this.activeSectionIndex = 0;
-      this.activeSection = this.sections[this.activeSectionIndex];
+      this.activeSection = 0;
 
       this.globalEls = globalEls;
       this.scrolling = false;
-      this.deviceType = this.helpers.getDeviceType();
+      this.isMobile = this.helpers.isMobile();
 
       this.resizeTimeout = false;
       this.resizeDelay = 250;
 
       this.scrollY = window.scrollY;
+      this.scrollInterval = false;
+      this.scrollOffset = 0;
 
+      this.setActiveSection();
       this.initEventListeners();
+      this.initSection();
     }
 
     initEventListeners() {
@@ -51,8 +55,11 @@
       window.addEventListener('wheel', this.wheelScrolled.bind(this));
 
       this.globalEls.logoPath.addEventListener('animationend', this.loadHomePage.bind(this));
-      this.sections.forEach(el => el.el.addEventListener('animationend', this.endSectionScrolling.bind(this)));
-      this.globalEls.menuLis.forEach(el => el.addEventListener('click', this.menuSection.bind(this)));
+      this.globalEls.menuLis.forEach(el => el.addEventListener('click', this.goToSection.bind(this)));
+      this.globalEls.menuLis[0].addEventListener('click', this.toggleMenu.bind(this));
+
+      this.sections.forEach(el => el.addEventListener('animationend', this.endSectionScrolling.bind(this)));
+
     }
 
     debounceResize() {
@@ -61,20 +68,22 @@
     }
 
     windowResize() {
-      const prevDevice = this.deviceType;
-      this.deviceType = this.helpers.getDeviceType();
+      const prevDevice = this.isMobile;
+      this.isMobile = this.helpers.isMobile();
 
-      if (prevDevice !== this.deviceType) {
-        if (this.deviceType === 'desktop') {
+      if (prevDevice !== this.isMobile) {
+        if (this.isMobile) {
+          window.scrollTo(0, this.activeSection.getBoundingClientRect().top);
+          this.globalEls.menu.classList.remove('expand');
+        } else {
           window.scrollTo(0, 0);
-        } else if (this.deviceType === 'mobile') {
-          window.scrollTo(0, this.activeSection.el.getBoundingClientRect().top)
+          this.globalEls.menu.classList.add('expand');
         }
       }
     }
 
     wheelScrolled(e) {
-      if (this.deviceType === 'mobile') {
+      if (this.isMobile) {
         this.mobileScroll();
       } else {
         if (this.scrolling) return;
@@ -88,44 +97,41 @@
           this.startSectionScrolling(1);
         }
       }
-      this.scrollY = window.scrollY;
     }
 
     mobileScroll() {
       const dir = this.scrollY < window.scrollY ? 'down' : 'up';
-      
+      this.scrollY = window.scrollY;
+
       if (
         dir === 'down' && 
         this.activeSectionIndex < this.sections.length - 1 &&
-        this.activeSection.el.getBoundingClientRect().top < (document.documentElement.clientHeight / 2) * -1
+        this.activeSection.getBoundingClientRect().top < (document.documentElement.clientHeight / 2) * -1
       ) {
+        
           this.activeSectionIndex++;
-          this.activeSection = this.sections[this.activeSectionIndex];
+          this.setActiveSection();
           this.changeSectionClasses();
         }
       else if (
         dir == 'up' &&
         this.activeSectionIndex > 0 &&
-        this.activeSection.el.getBoundingClientRect().top > document.documentElement.clientHeight / 2
+        this.activeSection.getBoundingClientRect().top > document.documentElement.clientHeight / 2
       ) {
         this.activeSectionIndex--;
-        this.activeSection = this.sections[this.activeSectionIndex];
+        this.setActiveSection();
         this.changeSectionClasses();
       }
-    }
-
-    loadHomePage() {
-      this.activeSection.el.classList.add('loaded');
-      // this.globalEls.menu.classList.add('expand');
     }
 
     startSectionScrolling(direction) {
       const dirClass = direction > 0 ? 'from-bottom' : 'from-top';
 
       this.scrolling = true;
-      this.activeSection = this.sections[this.activeSectionIndex];
+      this.setActiveSection();
 
-      this.activeSection.el.classList.add(dirClass);
+      this.activeSection.classList.add(dirClass);
+      this.activeSection.style.zIndex = 2;
     }
 
     endSectionScrolling(e) {
@@ -135,31 +141,76 @@
       }
     }
 
-    changeSectionClasses() {
-      this.sections.forEach(section => section.el.classList.remove('active')); 
-      if (this.activeSectionIndex === 1)  {
-        this.helpers.swapBodyClass(this.projectCtrl.projectData[this.projectCtrl.activeProjectIndex].class);
-      } else {
-        this.helpers.swapBodyClass(this.activeSection.getId());
-      }
-      this.activeSection.el.classList.add('active', 'loaded');
-      this.activeSection.el.classList.remove('from-bottom', 'from-top');
+    scrollTo(element, to, duration, ctrl) {
+      if (duration < 0) return;
+      var difference = to - element.scrollTop;
+      var perTick = difference / duration * 10;
+      setTimeout(function() {
+        if (perTick > 0 || perTick < 0) {
+          element.scrollTop += perTick;
+          ctrl.scrollTo(element, to, duration - 10, ctrl);
+        }
+      }, 10);
     }
 
-    menuSection(e) {
-    // get section index both menuLi 0 & 1 should go to section 0
-    // const clickedSquare = this.helpers.findLiIndex(this.globalEls.menuLis, e.target);
-    // const targetSection = Math.max(clickedSquare - 1, 0);
-    
-    
-    // if (targetSection < this.activeSectionIndex) {
-    //   this.activeSectionIndex = targetSection;
-    //   this.startSectionScrolling(-1);
-    // } else if (targetSection > this.activeSectionIndex) {
-    //   this.activeSectionIndex = targetSection;
-    //   this.startSectionScrolling(1);
-    // }
+    initSection() {
+      const vh = document.documentElement.clientHeight;
 
+      this.activeSectionIndex = [...this.sections].findIndex(section => section.getBoundingClientRect().top > vh / -2);
+      this.setActiveSection();
+      this.changeSectionClasses();
+
+      if (!this.isMobile) {
+        this.globalEls.menu.classList.add('expand');
+      }
+    }
+
+    setActiveSection() {
+      this.activeSection = this.sections[this.activeSectionIndex];
+    }
+
+    changeSectionClasses() {
+      this.sections.forEach(section => section.classList.remove('active')); 
+      if (this.activeSectionIndex === 1)  {
+        this.helpers.swapBodyClass(this.projectCtrl.projectData[this.projectCtrl.activeProjectIndex].class);
+        this.activeSection.classList.add('show-nav');
+      } else {
+        this.helpers.swapBodyClass(this.activeSection.id);
+      }
+      this.activeSection.classList.add('active', 'loaded');
+      this.activeSection.classList.remove('from-bottom', 'from-top');
+      this.activeSection.style.zIndex = 1;
+    }
+
+    goToSection(e) {
+      // get section index both menuLi 0 & 1 should go to section 0
+      const clickedSquare = this.helpers.findLiIndex(this.globalEls.menuLis, e.target);
+      const targetSection = Math.max(clickedSquare - 1, 0);
+
+      if (this.isMobile) {
+        if (clickedSquare !== 0) {
+          this.scrollTo(document.documentElement, this.sections[targetSection].offsetTop, 1000, this);   
+        }
+      } else {
+        
+        if (targetSection < this.activeSectionIndex) {
+          this.activeSectionIndex = targetSection;
+          this.startSectionScrolling(-1);
+        } else if (targetSection > this.activeSectionIndex) {
+          this.activeSectionIndex = targetSection;
+          this.startSectionScrolling(1);
+        }
+      }
+    }    
+
+    toggleMenu() {
+      if (this.isMobile) {
+        this.globalEls.menu.classList.toggle('expand');
+      }
+    }
+
+    loadHomePage(e) {
+      this.activeSection.classList.add('show-content');
     }
   }
 
@@ -286,23 +337,6 @@
     }
   }
 
-  class Section {
-    constructor(el, i) {
-      this.el = el;
-      this.index = i;
-      this.top = false;
-      this.height = false;
-    }
-
-    getId() {
-      return this.el.id;
-    }
-
-    removeDirections() {
-      this.el.classList.remove('from-bottom', 'from-top');
-    }
-  }
-
   class Helpers {
     constructor(bodyClasses) {
       this.bodyClasses = bodyClasses;
@@ -328,22 +362,17 @@
       return [...group].findIndex(el => target == el)
     }
 
-    getDeviceType() {
-      const windowW = document.documentElement.clientWidth;
-      if (windowW < 768) {
-        return 'mobile';
-      }
-      return 'desktop';
+    isMobile() {
+      return document.documentElement.clientWidth < 1024;
     }
   }
 
-
-
   const bodyClasses = [...projectData.map(el => el.class), 'landing', 'map'];
   const helpers = new Helpers(bodyClasses);
-  const sections = [...document.querySelectorAll('section.page-section')].map((el, i) => new Section(el, i));
+  const sections = document.querySelectorAll('section.page-section');
   const projectController = new Projects(projectEls, projectData, helpers);
   const mainController = new Controller(projectController, helpers, sections, globalEls);
 
 }
+
 

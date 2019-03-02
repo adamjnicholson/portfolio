@@ -1,4 +1,5 @@
 #projects {
+  padding-bottom: $small-square;
   #project-nav {
     position: sticky;
     bottom: 0;
@@ -8,6 +9,7 @@
     justify-content: space-between;
     transform: translateY(100%);
     transition: $animate;
+    z-index: 5;
     #arrows {
       display: flex;
       flex-direction: row-reverse;
@@ -29,7 +31,7 @@
         &.next {
           &:after {
             left: -100%;
-            border-left: 4px solid $white;
+            border-left: 2px solid $white;
           }
           &:hover {
             &:after {
@@ -45,7 +47,7 @@
         &.prev {
           &:after {
             right: -100%;
-            border-right: 4px solid $white;
+            border-right: 2px solid $white;
           }
           &:hover {
             &:after {
@@ -81,6 +83,7 @@
       display: flex;   
       justify-content: space-between;     
       align-items: center;
+      transition: $animate;
       .progress-inner {
         position: absolute;
         right: 1rem;
@@ -94,10 +97,12 @@
         width: 100%;
         height: 3px;
         margin: 0 1rem;
+        transition: $animate;
         .bar-inner {
           height: 100%;
           width: 33%;
           background-color: $white;
+          transition: $animate;
         }
       }
       #current {
@@ -107,7 +112,7 @@
   }
 }
 
-#projects.loaded {
+#projects.show-nav {
   #project-nav {
     transform: translateY(0);
   }
@@ -116,6 +121,7 @@
 
 @media (min-width: 768px) {
   #projects {
+    padding-bottom: 0;
     #project-nav {
       position: absolute;
       width: 100%;
@@ -134,10 +140,13 @@
           border-right: none;
           opacity: 0;
           transform: translateX(100%);
-          transition: transform .3s ease-out .7s;
+          transition: transform .3s ease-out .7s, background-color .3s ease-out 0s;
           &:first-child {
             border-bottom: 1px solid rgba($white, .2);
-            transition-delay: .6s;
+            transition: transform .3s ease-out .6s, background-color .3s ease-out 0s;
+          }
+          &.next:after, &.prev:after {
+            border-width: 3px;
           }
         }
       }
@@ -161,7 +170,7 @@
     } 
   }
 
-  #projects.loaded {
+  #projects.show-nav {
     #project-nav {
       opacity: 1;
       #arrows li {
@@ -182,6 +191,9 @@
       #arrows li {
         width: $med-square;
         height: $med-square;
+        &.next:after, &.prev:after {
+          border-width: 4px;
+        }
       }
       #progress-bar-container {
         height: $med-square;

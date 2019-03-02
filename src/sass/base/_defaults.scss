@@ -14,8 +14,9 @@ h5, .h5, h6, .h6 {
 	margin-top: 0;
 }
 
-// h1, .h1 { font-size: 9.375rem}
-h2, .h2 { font-size: 15vw}
+h2, .h2 {font-size: 2.375rem; margin-bottom: 1rem}
+
+// h2, .h2 { font-size: 15vw}
 h3, .h3 {}
 h4, .h4 {}
 h5, .h5 {}
@@ -74,7 +75,7 @@ ul.no-list,
 		font-size: 16px;
 	}
 	h1, .h1 { font-size: 9.375rem;}
-	h2, .h2 { font-size: 6.25rem;}
+	h2, .h2 { font-size: 4.25rem; margin-bottom: 2rem;}
 }
 
 @media (min-width: 1024px) {

@@ -8,14 +8,13 @@
     }
   }
   #projects {
-    
     &.#{nth($project, 1)} {
       &.loaded #project-gallery #preview-container:hover li.magnifier {
         background-color: #{nth($project, 2)};
       }
       background-color: $lightColour;
       &:after {
-        background: linear-gradient(to right, rgba(0,0,0,0) 0%, $mainColour 70%);
+        background: linear-gradient(to top, rgba(0,0,0,0) 0%, $mainColour 99%);
       }
       .button {
         color: $mainColour;
@@ -40,6 +39,20 @@
 .map {
   #main-menu li {
     background-color: $light-purple;
+  }
+}
+
+@media (min-width: 1024px) {
+  @each $project in $projects {
+    $mainColour: nth($project, 2);
+    $lightColour: nth($project, 3);
+    #projects {
+      &.#{nth($project, 1)} {
+        &:after {
+          background: linear-gradient(to right, rgba(0,0,0,0) 0%, $mainColour 70%);
+        }
+      }
+    }
   }
 }
 
