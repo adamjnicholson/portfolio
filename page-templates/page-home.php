@@ -35,6 +35,22 @@ get_header();
   $mapID = 34;
   $mapPage = get_post($mapID);
   $mapContent = apply_filters('the_content', $mapPage->post_content); 
+  $markers = [
+    'cafes' => get_field('cafes', $mapID),
+    'bars' => get_field('bars', $mapID)
+  ];
+  $mapMarkers = [];
+
+  foreach ($markers as $key => $type) {
+    $typeMarkers = [];
+    foreach ($type as $place) {
+      $typeMarkers[] = [$place['marker']['lat'], $place['marker']['lng']];
+    }
+    $mapMarkers[$key]['locations'] = $typeMarkers;
+  }
+
+  $mapMarkers['cafes']['icon'] = 'coffee.svg';
+  $mapMarkers['bars']['icon'] = 'beer.svg';
 
 ?>
 
@@ -56,7 +72,10 @@ get_header();
     endwhile; endif; wp_reset_postdata();
     ?>
     <script type='text/javascript'>
-      <?php echo 'var projects = ' . json_encode($projectInfo) . ';'; ?>
+      <?php 
+        echo 'var projects = ' . json_encode($projectInfo) . ';'; 
+        echo 'var markers = ' . json_encode($mapMarkers) . ';';
+      ?>
     </script>
     <section id="landing" class="page-section active">
     <?php echo genSvg('lg-logo', 'absolute-center'); ?>
@@ -77,7 +96,7 @@ get_header();
         </div>
         <div id="content-container">
           <p><?php echo $projectInfo[0]['desc']; ?></p>
-          <a href="<?php echo $projectInfo[0]['url']; ?>" class="button"><span>Visit Site</span><?php echo genSvg('icon-arrow-right', 'absolute-center'); ?></a>
+          <a href="<?php echo $projectInfo[0]['url']; ?>" class="button" target="_blank"><span>Visit Site</span><?php echo genSvg('icon-arrow-right', 'absolute-center'); ?></a>
         </div>
       </article>
       <aside>
@@ -96,7 +115,7 @@ get_header();
             <?php foreach ($projectInfo[0]['gallery'] as $img) : ?>
               <li><div class="preview-image" <?php genBgImg($img); ?>></div></li>
             <?php endforeach; ?>
-            <li class="magnifier"></li>
+            <li class="magnifier"><?php echo genSvg('icon-magnify', 'absolute-center'); ?></li>
           </ul>
         </div>
         <nav id="project-nav">
