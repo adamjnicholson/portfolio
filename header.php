@@ -13,6 +13,7 @@
     <meta charset="<?php bloginfo( 'charset' ); ?>">
     <meta name="viewport" content="width=device-width">
     <?php wp_head(); ?>
+    <?php genFavicon(); ?>
     <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
   </head>
 
