@@ -7,6 +7,7 @@
     projectNumber: document.getElementById('project-number'),
     projectTitle: document.getElementById('project-title'),
     desc: document.getElementById('content-container'),
+    btn: document.querySelector('#projects a.button'),
     logo: document.querySelector('#logo img'),
     galleryImages: document.querySelectorAll('#project-gallery .gallery-image'),
     previewImages: document.querySelectorAll('#preview-container .preview-image'),
@@ -292,6 +293,7 @@
     }
 
     loadProject(direction, e) {
+      console.log(e.target)
       if (!e.target.classList.contains('disabled')) {
         this.setActiveProjectIndex(direction);
         this.disabledBtns();
@@ -312,15 +314,22 @@
     }
 
     changeContent(project) {
-      const btn = [...this.els.desc.childNodes].find(el => el.tagName === 'A');
+      const btn = this.els.btn;
       btn.href = project.url;
+
+      const title = this.els.projectTitle;
 
       setTimeout(() => {
         this.helpers.swapBgImg(this.els.bgImage, project.mainImg);
         this.els.projectNumber.textContent = `0${this.activeProjectIndex + 1}`;
         this.els.projectTitle.textContent = project.title;
         this.els.desc.innerHTML = project.desc;
-        this.els.desc.appendChild(btn);
+        title.textContent = project.title;
+        this.els.desc.prepend(title);
+        if (project.url) {
+          this.els.desc.appendChild(btn);
+
+        }
         this.els.logo.src = project.logo;
 
         this.els.galleryImages.forEach (el => {

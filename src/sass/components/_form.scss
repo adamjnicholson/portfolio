@@ -9,7 +9,6 @@ form.wpcf7-form {
   }
 }
 
-
 .input-container {
   padding: 0 .75rem;
   position: relative;
@@ -46,8 +45,6 @@ form.wpcf7-form {
     z-index: 2;
   }
 }
-
-
 
 .submit-container {
   width: 100%;
@@ -95,6 +92,10 @@ form.wpcf7-form {
     background-color: $light-purple;
     transition: $animate;
   }
+}
+
+.grecaptcha-badge {
+  display: none;
 }
 
 @media (min-width: 768px) {

@@ -90,11 +90,14 @@ get_header();
       </ul>
     <div class="col-2">
       <article>
-        <div id="title-container">
-          <span id="project-number" class="h1">01</span>
-          <span id="project-title" class="h2"><?php echo $projectInfo[0]['title']; ?></span>
-        </div>
+        <!-- <div id="title-container"> -->
+          <div id="project-number" class="h1">01</div>
+          <!-- <span id="project-title" class="h2"><?php echo $projectInfo[0]['title']; ?></span> -->
+
+        <!-- </div> -->
         <div id="content-container">
+          <div id="project-title" class="h2"><?php echo $projectInfo[0]['title']; ?></div>
+
           <p><?php echo $projectInfo[0]['desc']; ?></p>
           <a href="<?php echo $projectInfo[0]['url']; ?>" class="button" target="_blank"><span>Visit Site</span><?php echo genSvg('icon-arrow-right', 'absolute-center'); ?></a>
         </div>
