@@ -44,7 +44,7 @@
 }
 
 #landing.loaded .icon  path {
-      animation: dash .7s linear 0s 1 forwards;
+  animation: dash .7s linear 0s 1 forwards;
 }
 
 #landing.show-content {
@@ -64,7 +64,7 @@
     path {
       fill: $white;
       stroke: $clear;
-      // animation: dash .7s linear 0s 1 forwards;
+      animation: dash .7s linear 0s 1 forwards;
       &:last-child {
         fill: $white;
       }

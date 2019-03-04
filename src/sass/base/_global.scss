@@ -64,10 +64,6 @@ input[type="submit"] {
     z-index: 10;
     animation: from-top .3s ease-out 0s 1 forwards
   }
-  &.active {
-    transform: translateY(0);
-    transition: $animate;
-  }
   &:after {
     content: '';
     @include absolute-cover;
@@ -102,7 +98,10 @@ input[type="submit"] {
     top: 0;
     left: 0;
     transform: translateY(100%);
-
+    &.active {
+      transform: translateY(0);
+      transition: $animate;
+    }
   }
 }
 

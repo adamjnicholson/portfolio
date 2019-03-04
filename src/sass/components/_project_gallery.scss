@@ -16,7 +16,7 @@
       height: 100%;
       opacity: 0;
       background-repeat: no-repeat;
-      background-position: 0% center;
+      background-position: center;
       background-size: cover;
       transform: translateX(1rem);
       transition: transform .4s ease-out, opacity .6s ease-out;
@@ -45,6 +45,7 @@
         background-color: $white;
         transform: translateY(100%);
         transition: $animate;
+        cursor: pointer;
         &.magnifier {
           position: absolute;
           top: 0;
@@ -53,6 +54,14 @@
           transition: $animate;
           opacity: 0;
           pointer-events: none;
+          .icon {
+            display: flex;
+            justify-content: center;
+          }
+          svg {
+            width: 75%;
+            height: 75%;
+          }
         }
         .preview-image {
           width: 100%;
@@ -84,7 +93,7 @@
         }
       }
       &:hover li.magnifier {
-        opacity: .5;
+        opacity: 1;
       }
     }
   }

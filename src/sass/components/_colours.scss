@@ -10,7 +10,7 @@
   #projects {
     &.#{nth($project, 1)} {
       &.loaded #project-gallery #preview-container:hover li.magnifier {
-        background-color: #{nth($project, 2)};
+        background-color: rgba(nth($project, 2), .5);
       }
       background-color: $lightColour;
       &:after {

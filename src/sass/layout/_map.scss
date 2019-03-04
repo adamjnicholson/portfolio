@@ -27,9 +27,18 @@
     padding: $med-square 1rem;
     box-sizing: content-box;
   }
-  h1 {
-    font-size: 4.8vw;
-    line-height: 1.2;
+  // h1 {
+  //   font-size: 4.8vw;
+  //   line-height: 1.2;
+  // }
+  .toggle-word {
+    display: inline-block;
+    font-weight: 700;
+    cursor: pointer;
+    transition: $animate;
+    &:hover {
+      transform: translateY(-2px);
+    }
   }
 }
 
@@ -65,6 +74,9 @@
       order: 1;
       min-height: 100vh;
     }
+    h2 {
+      font-size: 4.8vw;
+    }
     aside {
       display: block;
     }
@@ -77,7 +89,7 @@
       padding-left: $square;
       order: 1;
     }
-    h1 {
+    h2 {
       text-indent: -2.3rem;
       padding-left: 2.3rem;
     }
@@ -89,7 +101,7 @@
 
 @media (min-width: 1400px) {
   #map {
-    h1 {
+    h2 {
       font-size: 4.5rem;
     }
   }

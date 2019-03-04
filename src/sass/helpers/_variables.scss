@@ -16,6 +16,9 @@ $light-yellow: #F8B51A;
 $red: #E30513;
 $light-red: #EB3945;
 
+$blue: #2b3d53;
+$light-blue: #556476;
+
 $accent-colour: $black;
 
 $body-font: 'Lato', sans-serif;
@@ -28,7 +31,8 @@ $med-square: 4.5rem;
 $square: 6.25rem;
 
 $projects: (
-  ('natureworks', $green, $light-green),
+  // ('natureworks', $green, $light-green),
   ('anboc', $yellow, $light-yellow),
-  ('buywood', $red, $light-red)
+  ('buywood', $red, $light-red),
+  ('bsb', $blue, $light-blue)
 );
