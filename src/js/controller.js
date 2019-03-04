@@ -44,22 +44,34 @@
       this.scrollInterval = false;
       this.scrollOffset = 0;
 
+      this.startSwipe = -1;
+      this.elapsedTime = -1;
+      this.allowedTime = 200;
+      this.threshold = 150;
+      this.restraint = 100;
+      this.startX = -1;
+      this.startY = -1;
+      this.endY = -1;
+
       this.setActiveSection();
       this.initEventListeners();
       this.initSection();
+    
     }
 
     initEventListeners() {
       window.addEventListener('resize', this.debounceResize.bind(this) );
       window.addEventListener('scroll', this.wheelScrolled.bind(this));
       window.addEventListener('wheel', this.wheelScrolled.bind(this));
+      window.addEventListener('touchstart', this.touchStart.bind(this));
+      window.addEventListener('touchend', this.touchEnd.bind(this));
+
 
       this.globalEls.logoPath.addEventListener('animationend', this.loadHomePage.bind(this));
       this.globalEls.menuLis.forEach(el => el.addEventListener('click', this.goToSection.bind(this)));
       this.globalEls.menuLis[0].addEventListener('click', this.toggleMenu.bind(this));
 
       this.sections.forEach(el => el.addEventListener('animationend', this.endSectionScrolling.bind(this)));
-
     }
 
     debounceResize() {
@@ -68,10 +80,10 @@
     }
 
     windowResize() {
-      const prevDevice = this.isMobile;
+      const prevState = this.isMobile;
       this.isMobile = this.helpers.isMobile();
 
-      if (prevDevice !== this.isMobile) {
+      if (prevState !== this.isMobile) {
         if (this.isMobile) {
           window.scrollTo(0, this.activeSection.getBoundingClientRect().top);
           this.globalEls.menu.classList.remove('expand');
@@ -82,12 +94,37 @@
       }
     }
 
+    touchStart(e) {
+      const touch = e.changedTouches[0];
+      this.startX = touch.clientX;
+      this.startY = touch.clientY;
+      this.startSwipe = new Date();
+    }
+
+    touchEnd(e) {
+      const touch = e.changedTouches[0];
+      const distX = touch.clientX - this.startX;
+      const distY = touch.clientY - this.startY;
+      this.elapsedTime = new Date() - this.startSwipe;
+
+      if (this.elapsedTime <= this.allowedTime) {
+        if (Math.abs(distY) >= this.threshold && Math.abs(distX) <= this.restraint){
+          if (distY < 0) {
+            this.activeSectionIndex++;
+            this.startSectionScrolling(1);
+          } else {
+            this.activeSectionIndex--;
+            this.startSectionScrolling(-1);
+          }
+        }
+      }
+    }
+    
     wheelScrolled(e) {
       if (this.isMobile) {
         this.mobileScroll();
       } else {
         if (this.scrolling) return;
-
         window.scrollTo( 0, 0 );
         if (e.deltaY < 0 && this.activeSectionIndex > 0) { // up
           this.activeSectionIndex--;
@@ -102,13 +139,11 @@
     mobileScroll() {
       const dir = this.scrollY < window.scrollY ? 'down' : 'up';
       this.scrollY = window.scrollY;
-
       if (
         dir === 'down' && 
         this.activeSectionIndex < this.sections.length - 1 &&
-        this.activeSection.getBoundingClientRect().top < (document.documentElement.clientHeight / 2) * -1
+        !this.sectionInViewport(this.activeSection)
       ) {
-        
           this.activeSectionIndex++;
           this.setActiveSection();
           this.changeSectionClasses();
@@ -122,6 +157,11 @@
         this.setActiveSection();
         this.changeSectionClasses();
       }
+    }
+
+    sectionInViewport(section) {
+      const box = section.getBoundingClientRect();
+      return box.bottom > 0 && box.bottom > document.documentElement.clientHeight / 2;
     }
 
     startSectionScrolling(direction) {
@@ -145,7 +185,7 @@
       if (duration < 0) return;
       var difference = to - element.scrollTop;
       var perTick = difference / duration * 10;
-      setTimeout(function() {
+      setTimeout(() => {
         if (perTick > 0 || perTick < 0) {
           element.scrollTop += perTick;
           ctrl.scrollTo(element, to, duration - 10, ctrl);
@@ -156,7 +196,7 @@
     initSection() {
       const vh = document.documentElement.clientHeight;
 
-      this.activeSectionIndex = [...this.sections].findIndex(section => section.getBoundingClientRect().top > vh / -2);
+      this.activeSectionIndex = [...this.sections].findIndex(this.sectionInViewport);
       this.setActiveSection();
       this.changeSectionClasses();
 
@@ -374,5 +414,8 @@
   const mainController = new Controller(projectController, helpers, sections, globalEls);
 
 }
+
+
+
 
 
